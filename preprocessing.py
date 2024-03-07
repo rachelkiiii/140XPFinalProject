@@ -10,15 +10,38 @@ from sklearn.linear_model import LogisticRegression
 from spellchecker import SpellChecker
 import string
 import time
+from nltk.corpus import words
 
 
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('stopwords')
+nltk.download('words')
 
 start = time.time()
 df = pd.read_csv("~/Downloads/tweets_01-08-2021.csv")
-#df= df.iloc[0:1000]
+
+# Convert the 'date' column to datetime format
+df['date'] = pd.to_datetime(df['date'])
+
+# Define the conditions for each time block
+conditions = [
+    (df['date'] > "2015-06-14") & (df['date'] < "2016-07-19"),
+    (df['date'] > "2016-07-18") & (df['date'] < "2016-11-08"),
+    (df['date'] > "2016-11-07") & (df['date'] < "2016-11-09"),
+    (df['date'] > "2016-11-08") & (df['date'] < "2017-01-21"),
+    (df['date'] > "2020-08-23") & (df['date'] < "2020-11-03"),
+    (df['date'] > "2020-11-02") & (df['date'] < "2020-11-04"),
+    (df['date'] > "2020-11-03")
+]
+
+# Define the values for each time block
+values = ['Trump_primary_2016', 'Trump_elec_2016', 'Trump_elecday_2016', 'Trump_post_2016',
+          'Trump_elec_2020', 'Trump_elecday_2020', 'Trump_post_2020']
+
+# Add a new column 'time_block' based on the conditions and values
+df['time_block'] = np.select(conditions, values, default='Other')
+df = df[df['time_block'] != 'Other']
 
 # Tokenize the 'review' column
 df['text'] = df['text'].apply(lambda review: word_tokenize(review))
@@ -33,31 +56,25 @@ punctuation_chars = set(string.punctuation)
 df['text'] = df['text'].apply(lambda tokens: [word for word in tokens if word.isalpha() and word.lower() not in stop_words and word not in punctuation_chars and word.lower() not in {'br','\'\'','\'s', '``', 'oz', 'rt', 'https'}])
 
 
+english_words = set(words.words())
 
-# Initialize spellchecker
+# Filter out non-English words
+df['text'] = df['text'].apply(lambda tokens: [word for word in tokens if word in english_words])
+
+'''
 spell = SpellChecker()
 
-def process_review(tokens):
-    new_sentence = []
-    for word, tag in pos_tag(tokens):
-        word = word.lower()
-        if tag == 'RB':  # Checking if the word is an adverb
-            # Perform adverb to adjective conversion
-            if word.endswith('ly'):  # Check if the adverb ends with 'ly'
-                new_word = word[:-2]  # Remove 'ly' and add 'e' for demonstration
-                new_sentence.append(spell.correction(new_word))  # Spell check the new word
-            else:
-                new_sentence.append(spell.correction(word))  # Spell check the word as is
-        else:
-            new_sentence.append(spell.correction(word))  # Spell check non-adverbs
+# Spell check and convert to lowercase
+def spell_check_and_lower(tokens):
+    corrected_tokens = [spell.correction(word.lower()) for word in tokens]
+    return corrected_tokens
 
-    # Remove None values after spell checking
-    filtered_list = [value for value in new_sentence if value is not None]
+# Apply spell check and lowercase conversion to 'text' column
+df['text'] = df['text'].apply(spell_check_and_lower)
+'''
 
-    return filtered_list
+df['text'] = df['text'].apply(lambda tokens: [word.lower() for word in tokens])
 
-# Apply the processing function to each row
-df['text'] = df['text'].apply(process_review)
 # Drop rows where 'Text' column has empty [] values
 df = df[df['text'].apply(lambda x: x != [])]
 
