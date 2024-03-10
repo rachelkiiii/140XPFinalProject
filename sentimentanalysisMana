@@ -1,0 +1,124 @@
+# Trump Primary 2016
+```{r}
+text1 <- Trump.primary.2016$cleaned_text
+nrc_T1 <- get_nrc_sentiment(text1)
+
+pie_graph.T1 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T1[, 9:10])))), proportion = colSums(prop.table(nrc_T1[, 9:10])))
+ggplot(pie_graph.T1, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T1 = sort(colSums(prop.table(nrc_T1[, 1:8])))
+barplot(nrcothers.T1, cex.names = 0.8)
+
+nrc1.count <- colSums(prop.table(nrc_T1[, 1:8]))
+```
+
+
+# Trump Election Period 2016
+```{r}
+text2 <- Trump.elec.2016$cleaned_text
+nrc_T2 <- get_nrc_sentiment(text2)
+
+pie_graph.T2 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T2[, 9:10])))), proportion = colSums(prop.table(nrc_T2[, 9:10])))
+ggplot(pie_graph.T2, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T2 = sort(colSums(prop.table(nrc_T2[, 1:8])))
+barplot(nrcothers.T2, cex.names = 0.9)
+
+nrc2.count <- colSums(prop.table(nrc_T2[, 1:8]))
+```
+
+
+# Trump Election Day 2016
+```{r}
+text3 <- Trump.elecday.2016$cleaned_text
+nrc_T3 <- get_nrc_sentiment(text3)
+
+pie_graph.T3 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T3[, 9:10])))), proportion = colSums(prop.table(nrc_T3[, 9:10])))
+ggplot(pie_graph.T3, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T3 = sort(colSums(prop.table(nrc_T3[, 1:8])))
+barplot(nrcothers.T3, cex.names = 0.9)
+
+nrc3.count <- colSums(prop.table(nrc_T3[, 1:8]))
+```
+
+
+# Trump Post Election Day 2016
+```{r}
+text4 <- Trump.post.2016$cleaned_text
+nrc_T4 <- get_nrc_sentiment(text4)
+
+pie_graph.T4 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T4[, 9:10])))), proportion = colSums(prop.table(nrc_T4[, 9:10])))
+ggplot(pie_graph.T4, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T4 = sort(colSums(prop.table(nrc_T4[, 1:8])))
+barplot(nrcothers.T4, cex.names = 0.9)
+
+nrc4.count <- colSums(prop.table(nrc_T4[, 1:8]))
+```
+
+
+# Trump Election Period 2020
+```{r}
+text5 <- Trump.elec.2020$cleaned_text
+nrc_T5 <- get_nrc_sentiment(text5)
+
+pie_graph.T5 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T5[, 9:10])))), proportion = colSums(prop.table(nrc_T5[, 9:10])))
+ggplot(pie_graph.T5, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T5 = sort(colSums(prop.table(nrc_T5[, 1:8])))
+barplot(nrcothers.T5, cex.names = 0.9)
+
+nrc5.count <- colSums(prop.table(nrc_T5[, 1:8]))
+```
+
+
+# Trump Election Day 2020
+```{r}
+text6 <- Trump.elecday.2020$cleaned_text
+nrc_T6 <- get_nrc_sentiment(text6)
+
+pie_graph.T6 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T6[, 9:10])))), proportion = colSums(prop.table(nrc_T6[, 9:10])))
+ggplot(pie_graph.T6, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T6 = sort(colSums(prop.table(nrc_T6[, 1:8])))
+barplot(nrcothers.T6, cex.names = 0.8)
+
+nrc6.count <- colSums(prop.table(nrc_T6[, 1:8]))
+```
+
+
+# Trump Post Election Day 2020
+```{r}
+text7 <- Trump.post.2020$cleaned_text
+nrc_T7 <- get_nrc_sentiment(text7)
+
+pie_graph.T7 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T7[, 9:10])))), proportion = colSums(prop.table(nrc_T7[, 9:10])))
+ggplot(pie_graph.T7, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T7 = sort(colSums(prop.table(nrc_T7[, 1:8])))
+barplot(nrcothers.T7, cex.names = 0.9)
+
+nrc7.count <- colSums(prop.table(nrc_T7[, 1:8]))
+```
+
+
+
+# Line Graph Tracker of each emotion
+```{r}
+nrc1.count <- as.data.frame(nrc1.count)
+nrc2.count <- as.data.frame(nrc2.count)
+nrc3.count <- as.data.frame(nrc3.count)
+nrc4.count <- as.data.frame(nrc4.count)
+nrc5.count <- as.data.frame(nrc5.count)
+nrc6.count <- as.data.frame(nrc6.count)
+nrc7.count <- as.data.frame(nrc7.count)
+
+merge.df <- bind_cols(nrc1.count, nrc2.count, nrc3.count, nrc4.count, nrc5.count,
+                      nrc6.count, nrc7.count)
+merge.df$emotions <- rownames(merge.df)
+colnames(merge.df) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
+                        "4 Post Election 2016", "5 Election Period 2020", "6 Election Day 2020", 
+                        "7 Post Election 2020", "emotions")
+
+totalcount <- merge.df %>%
+  pivot_longer(!emotions, names_to = "time block", values_to = "proportion")
+
+ggplot(totalcount, aes(x = `time block`, y = proportion, group = emotions)) +
+  geom_line(aes(linetype = emotions, color = emotions)) + 
+  geom_point(aes(color = emotions)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
