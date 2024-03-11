@@ -37,7 +37,7 @@ plot(trust_ts)
 points(trust_ts, col="red")
 ```
 
-```{r changing discrete trust score to weekly average score}
+```{r changing discrete trust score to weekly average score for better analysis}
 # Convert the date column to actual Date type
 trust_ts_df$date <- as.Date(trust_ts_df$date)
 head(trust_ts_df)
