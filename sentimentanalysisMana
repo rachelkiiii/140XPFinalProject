@@ -8,6 +8,7 @@ ggplot(pie_graph.T1, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, 
 nrcothers.T1 = sort(colSums(prop.table(nrc_T1[, 1:8])))
 barplot(nrcothers.T1, cex.names = 0.8)
 
+nrc1.pn <- colSums(prop.table(nrc_T1[, 9:10]))
 nrc1.count <- colSums(prop.table(nrc_T1[, 1:8]))
 ```
 
@@ -22,6 +23,7 @@ ggplot(pie_graph.T2, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, 
 nrcothers.T2 = sort(colSums(prop.table(nrc_T2[, 1:8])))
 barplot(nrcothers.T2, cex.names = 0.9)
 
+nrc2.pn <- colSums(prop.table(nrc_T2[, 9:10]))
 nrc2.count <- colSums(prop.table(nrc_T2[, 1:8]))
 ```
 
@@ -35,7 +37,7 @@ pie_graph.T3 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T3[, 9:10
 ggplot(pie_graph.T3, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
 nrcothers.T3 = sort(colSums(prop.table(nrc_T3[, 1:8])))
 barplot(nrcothers.T3, cex.names = 0.9)
-
+nrc3.pn <- colSums(prop.table(nrc_T3[, 9:10]))
 nrc3.count <- colSums(prop.table(nrc_T3[, 1:8]))
 ```
 
@@ -49,7 +51,7 @@ pie_graph.T4 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T4[, 9:10
 ggplot(pie_graph.T4, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
 nrcothers.T4 = sort(colSums(prop.table(nrc_T4[, 1:8])))
 barplot(nrcothers.T4, cex.names = 0.9)
-
+nrc4.pn <- colSums(prop.table(nrc_T4[, 9:10]))
 nrc4.count <- colSums(prop.table(nrc_T4[, 1:8]))
 ```
 
@@ -63,7 +65,7 @@ pie_graph.T5 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T5[, 9:10
 ggplot(pie_graph.T5, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
 nrcothers.T5 = sort(colSums(prop.table(nrc_T5[, 1:8])))
 barplot(nrcothers.T5, cex.names = 0.9)
-
+nrc5.pn <- colSums(prop.table(nrc_T5[, 9:10]))
 nrc5.count <- colSums(prop.table(nrc_T5[, 1:8]))
 ```
 
@@ -77,7 +79,7 @@ pie_graph.T6 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T6[, 9:10
 ggplot(pie_graph.T6, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
 nrcothers.T6 = sort(colSums(prop.table(nrc_T6[, 1:8])))
 barplot(nrcothers.T6, cex.names = 0.8)
-
+nrc6.pn <- colSums(prop.table(nrc_T6[, 9:10]))
 nrc6.count <- colSums(prop.table(nrc_T6[, 1:8]))
 ```
 
@@ -91,7 +93,7 @@ pie_graph.T7 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T7[, 9:10
 ggplot(pie_graph.T7, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
 nrcothers.T7 = sort(colSums(prop.table(nrc_T7[, 1:8])))
 barplot(nrcothers.T7, cex.names = 0.9)
-
+nrc7.pn <- colSums(prop.table(nrc_T7[, 9:10]))
 nrc7.count <- colSums(prop.table(nrc_T7[, 1:8]))
 ```
 
@@ -107,18 +109,79 @@ nrc5.count <- as.data.frame(nrc5.count)
 nrc6.count <- as.data.frame(nrc6.count)
 nrc7.count <- as.data.frame(nrc7.count)
 
-merge.df <- bind_cols(nrc1.count, nrc2.count, nrc3.count, nrc4.count, nrc5.count,
-                      nrc6.count, nrc7.count)
-merge.df$emotions <- rownames(merge.df)
-colnames(merge.df) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
-                        "4 Post Election 2016", "5 Election Period 2020", "6 Election Day 2020", 
+merge.df1 <- bind_cols(nrc1.count, nrc2.count, nrc3.count, nrc4.count)
+merge.df1$emotions <- rownames(merge.df1)
+colnames(merge.df1) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
+                        "4 Post Election 2016", "emotions")
+
+merge.df2 <- bind_cols(nrc5.count, nrc6.count, nrc7.count)
+merge.df2$emotions <- rownames(merge.df2)
+colnames(merge.df2) <- c("5 Election Period 2020", "6 Election Day 2020", 
                         "7 Post Election 2020", "emotions")
 
-totalcount <- merge.df %>%
+totalcount1 <- merge.df1 %>%
+  pivot_longer(!emotions, names_to = "time block", values_to = "proportion")
+totalcount2 <- merge.df2 %>%
   pivot_longer(!emotions, names_to = "time block", values_to = "proportion")
 
-ggplot(totalcount, aes(x = `time block`, y = proportion, group = emotions)) +
+ggplot() +
+  geom_line(data = totalcount1, aes(x = `time block`, y = proportion, group = emotions, linetype = emotions, color = emotions)) +
+  geom_line(data = totalcount2, aes(x = `time block`, y = proportion, group = emotions, linetype = emotions, color = emotions)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+geom_point(data = totalcount1, aes(x = `time block`, y = proportion, group = emotions, color = emotions)) + 
+  geom_point(data = totalcount2, aes(x = `time block`, y = proportion, group = emotions, color = emotions)) + 
+# anger, anticipation, joy, sadness, surprise 
+
+# combine fear, disgust, trust into one?
+```
+
+```{r}
+ggplot(totalcount1, aes(x = `time block`, y = proportion, group = emotions)) +
   geom_line(aes(linetype = emotions, color = emotions)) + 
   geom_point(aes(color = emotions)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ggplot(totalcount2, aes(x = `time block`, y = proportion, group = emotions)) +
+  geom_line(aes(linetype = emotions, color = emotions)) + 
+  geom_point(aes(color = emotions)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+# Line graph for positive vs negative
+```{r}
+nrc1.pn <- as.data.frame(nrc1.pn)
+nrc2.pn <- as.data.frame(nrc2.pn)
+nrc3.pn <- as.data.frame(nrc3.pn)
+nrc4.pn <- as.data.frame(nrc4.pn)
+nrc5.pn <- as.data.frame(nrc5.pn)
+nrc6.pn <- as.data.frame(nrc6.pn)
+nrc7.pn <- as.data.frame(nrc7.pn)
+
+merge.df3 <- bind_cols(nrc1.pn, nrc2.pn, nrc3.pn, nrc4.pn)
+merge.df3$sentiment <- rownames(merge.df3)
+colnames(merge.df3) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
+                        "4 Post Election 2016", "sentiment")
+
+merge.df4 <- bind_cols(nrc5.pn, nrc6.pn, nrc7.pn)
+merge.df4$sentiment <- rownames(merge.df4)
+colnames(merge.df4) <- c("5 Election Period 2020", "6 Election Day 2020", 
+                        "7 Post Election 2020", "sentiment")
+
+totalcount3 <- merge.df3 %>%
+  pivot_longer(!sentiment, names_to = "time block", values_to = "proportion")
+
+totalcount4 <- merge.df4 %>%
+  pivot_longer(!sentiment, names_to = "time block", values_to = "proportion")
+
+ggplot(totalcount3, aes(x = `time block`, y = proportion, group = sentiment)) +
+  geom_line(aes(linetype = sentiment, color = sentiment)) + 
+  geom_point(aes(color = sentiment)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ggplot(totalcount4, aes(x = `time block`, y = proportion, group = sentiment)) +
+  geom_line(aes(linetype = sentiment, color = sentiment)) + 
+  geom_point(aes(color = sentiment)) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
