@@ -1,9 +1,12 @@
 # Taig's Time Series
+# formatted for easy pasting into a .Rmd file
+# all functions needed to run are in the libraries included
+
 ```{r creating data objects}
 library(readr)
 library(dplyr)
 
-# read in data
+# read in data (from Kyle's cleaned data)
 trump_tweets <- read_csv("clean_tweets.csv")
 clean_tweets <- trump_tweets[,c(5,7)]
 
@@ -25,16 +28,16 @@ date <- ordered_tweets[,"date", drop=T]
 ```
 
 
-```{r creating time series}
+```{r creating raw time series}
 library(tseries)
 library(forecast)
 
-# create trust time series object
+# create trust time series object (irregularly spaced)
 trust_ts <- irts(date,trust)
 
-# plot (it looks terrible, I know) - note that the all points are at discrete values
-plot(trust_ts)
-points(trust_ts, col="red")
+# plot (hard to interpret, I know) - note that the all points are at discrete values
+plot(trust_ts, xlab="Date", ylab="Trust Score")
+points(trust_ts, col="red", cex=0.3)
 ```
 
 ```{r changing discrete trust score to weekly average score for better analysis}
@@ -51,8 +54,12 @@ trust_monthly_avg_df <- trust_ts_df %>%
   summarize(trust_monthly_avg = mean(trust, na.rm=T))
 head(trust_monthly_avg_df)
 
-# Create a monthly trust_ts object
+# Create a monthly trust time series object (regularly spaced)
 trust_monthly_ts <- ts(trust_monthly_avg_df$trust_monthly_avg, start = c(2009,05), frequency = 12)
-tsdisplay(trust_monthly_ts)
-auto.arima(trust_monthly_ts)
+
+# Plot
+tsdisplay(trust_monthly_ts, xlab="Date", ylab="Average Trust Score")
+
+# Finding the best fitting AR(p) model
+ar(trust_monthly_ts)
 ```
