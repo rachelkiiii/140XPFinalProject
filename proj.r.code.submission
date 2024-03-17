@@ -1,0 +1,236 @@
+# Data Cleaning (Kyle Lee)
+
+
+
+# Timeline (Mana Nakano)
+twt <- read_csv("tweets_01-08-2021 copy.csv")
+## creating new column of just date from date column
+twt$date2 <- as.Date(twt$date)
+
+## creating subset data based on pre-elec (2016 only), elec-period, elec-day, and post-elec
+## ucsb president data timeline referenced
+Trump.primary.2016 <- subset(twt, date2 > as.Date("2015-06-14") & date2 < as.Date("2016-07-19"))
+Trump.elec.2016 <- subset(twt, date2 > as.Date("2016-07-18") & date2 < as.Date("2016-11-08"))
+Trump.elecday.2016 <- subset(twt, date2 > as.Date("2016-11-07") & date2 < as.Date("2016-11-09"))
+Trump.post.2016 <- subset(twt, date2 > as.Date("2016-11-08") & date2 < as.Date("2017-01-21"))
+Trump.elec.2020 <- subset(twt, date2 > as.Date("2020-08-23") & date2 < as.Date("2020-11-03"))
+Trump.elecday.2020 <- subset(twt, date2 > as.Date("2020-11-02") & date2 < as.Date("2020-11-04"))
+Trump.post.2020 <- subset(twt, date2 > as.Date("2020-11-03"))
+
+
+# Sentiment Analysis (Mana Nakano)
+## Trump Primary 2016
+text1 <- Trump.primary.2016$cleaned_text
+nrc_T1 <- get_nrc_sentiment(text1)
+
+pie_graph.T1 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T1[, 9:10])))), proportion = colSums(prop.table(nrc_T1[, 9:10])))
+ggplot(pie_graph.T1, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T1 = sort(colSums(prop.table(nrc_T1[, 1:8])))
+barplot(nrcothers.T1, cex.names = 0.8)
+
+nrc1.pn <- colSums(prop.table(nrc_T1[, 9:10]))
+nrc1.count <- colSums(prop.table(nrc_T1[, 1:8]))
+
+## Trump Election Period 2016
+text2 <- Trump.elec.2016$cleaned_text
+nrc_T2 <- get_nrc_sentiment(text2)
+
+pie_graph.T2 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T2[, 9:10])))), proportion = colSums(prop.table(nrc_T2[, 9:10])))
+ggplot(pie_graph.T2, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T2 = sort(colSums(prop.table(nrc_T2[, 1:8])))
+barplot(nrcothers.T2, cex.names = 0.9)
+
+nrc2.pn <- colSums(prop.table(nrc_T2[, 9:10]))
+nrc2.count <- colSums(prop.table(nrc_T2[, 1:8]))
+
+## Trump Election Day 2016
+text3 <- Trump.elecday.2016$cleaned_text
+nrc_T3 <- get_nrc_sentiment(text3)
+
+pie_graph.T3 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T3[, 9:10])))), proportion = colSums(prop.table(nrc_T3[, 9:10])))
+ggplot(pie_graph.T3, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T3 = sort(colSums(prop.table(nrc_T3[, 1:8])))
+barplot(nrcothers.T3, cex.names = 0.9)
+nrc3.pn <- colSums(prop.table(nrc_T3[, 9:10]))
+nrc3.count <- colSums(prop.table(nrc_T3[, 1:8]))
+
+## Trump Post Election Day 2016
+text4 <- Trump.post.2016$cleaned_text
+nrc_T4 <- get_nrc_sentiment(text4)
+
+pie_graph.T4 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T4[, 9:10])))), proportion = colSums(prop.table(nrc_T4[, 9:10])))
+ggplot(pie_graph.T4, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T4 = sort(colSums(prop.table(nrc_T4[, 1:8])))
+barplot(nrcothers.T4, cex.names = 0.9)
+nrc4.pn <- colSums(prop.table(nrc_T4[, 9:10]))
+nrc4.count <- colSums(prop.table(nrc_T4[, 1:8]))
+
+## Trump Election Period 2020
+text5 <- Trump.elec.2020$cleaned_text
+nrc_T5 <- get_nrc_sentiment(text5)
+
+pie_graph.T5 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T5[, 9:10])))), proportion = colSums(prop.table(nrc_T5[, 9:10])))
+ggplot(pie_graph.T5, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T5 = sort(colSums(prop.table(nrc_T5[, 1:8])))
+barplot(nrcothers.T5, cex.names = 0.9)
+nrc5.pn <- colSums(prop.table(nrc_T5[, 9:10]))
+nrc5.count <- colSums(prop.table(nrc_T5[, 1:8]))
+
+## Trump Election Day 2020
+text6 <- Trump.elecday.2020$cleaned_text
+nrc_T6 <- get_nrc_sentiment(text6)
+
+pie_graph.T6 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T6[, 9:10])))), proportion = colSums(prop.table(nrc_T6[, 9:10])))
+ggplot(pie_graph.T6, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T6 = sort(colSums(prop.table(nrc_T6[, 1:8])))
+barplot(nrcothers.T6, cex.names = 0.8)
+nrc6.pn <- colSums(prop.table(nrc_T6[, 9:10]))
+nrc6.count <- colSums(prop.table(nrc_T6[, 1:8]))
+
+## Trump Post Election Day 2020
+text7 <- Trump.post.2020$cleaned_text
+nrc_T7 <- get_nrc_sentiment(text7)
+
+pie_graph.T7 <- data.frame(emotion = names(sort(colSums(prop.table(nrc_T7[, 9:10])))), proportion = colSums(prop.table(nrc_T7[, 9:10])))
+ggplot(pie_graph.T7, aes(x="", y=proportion, fill=emotion))+geom_bar(width = 1, stat = "identity")+coord_polar("y", start=0)+scale_fill_brewer(palette="Blues")+theme_minimal()
+nrcothers.T7 = sort(colSums(prop.table(nrc_T7[, 1:8])))
+barplot(nrcothers.T7, cex.names = 0.9)
+nrc7.pn <- colSums(prop.table(nrc_T7[, 9:10]))
+nrc7.count <- colSums(prop.table(nrc_T7[, 1:8]))
+
+## Line Graph Tracker of each emotion
+nrc1.count <- as.data.frame(nrc1.count)
+nrc2.count <- as.data.frame(nrc2.count)
+nrc3.count <- as.data.frame(nrc3.count)
+nrc4.count <- as.data.frame(nrc4.count)
+nrc5.count <- as.data.frame(nrc5.count)
+nrc6.count <- as.data.frame(nrc6.count)
+nrc7.count <- as.data.frame(nrc7.count)
+
+merge.df1 <- bind_cols(nrc1.count, nrc2.count, nrc3.count, nrc4.count)
+merge.df1$emotions <- rownames(merge.df1)
+colnames(merge.df1) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
+                         "4 Post Election 2016", "emotions")
+
+merge.df2 <- bind_cols(nrc5.count, nrc6.count, nrc7.count)
+merge.df2$emotions <- rownames(merge.df2)
+colnames(merge.df2) <- c("5 Election Period 2020", "6 Election Day 2020", 
+                         "7 Post Election 2020", "emotions")
+
+totalcount1 <- merge.df1 %>%
+  pivot_longer(!emotions, names_to = "time block", values_to = "proportion")
+totalcount2 <- merge.df2 %>%
+  pivot_longer(!emotions, names_to = "time block", values_to = "proportion")
+
+ggplot() +
+  geom_line(data = totalcount1, aes(x = `time block`, y = proportion, group = emotions, linetype = emotions, color = emotions)) +
+  geom_line(data = totalcount2, aes(x = `time block`, y = proportion, group = emotions, linetype = emotions, color = emotions)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+geom_point(data = totalcount1, aes(x = `time block`, y = proportion, group = emotions, color = emotions)) + 
+  geom_point(data = totalcount2, aes(x = `time block`, y = proportion, group = emotions, color = emotions)) + 
+
+ggplot(totalcount1, aes(x = `time block`, y = proportion, group = emotions)) +
+  geom_line(aes(linetype = emotions, color = emotions)) + 
+  geom_point(aes(color = emotions)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ggplot(totalcount2, aes(x = `time block`, y = proportion, group = emotions)) +
+  geom_line(aes(linetype = emotions, color = emotions)) + 
+  geom_point(aes(color = emotions)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+## Line graph for positive vs negative
+nrc1.pn <- as.data.frame(nrc1.pn)
+nrc2.pn <- as.data.frame(nrc2.pn)
+nrc3.pn <- as.data.frame(nrc3.pn)
+nrc4.pn <- as.data.frame(nrc4.pn)
+nrc5.pn <- as.data.frame(nrc5.pn)
+nrc6.pn <- as.data.frame(nrc6.pn)
+nrc7.pn <- as.data.frame(nrc7.pn)
+
+merge.df3 <- bind_cols(nrc1.pn, nrc2.pn, nrc3.pn, nrc4.pn)
+merge.df3$sentiment <- rownames(merge.df3)
+colnames(merge.df3) <- c("1 Primary 2016", "2 Election Period 2016", "3 Election Day 2016", 
+                         "4 Post Election 2016", "sentiment")
+
+merge.df4 <- bind_cols(nrc5.pn, nrc6.pn, nrc7.pn)
+merge.df4$sentiment <- rownames(merge.df4)
+colnames(merge.df4) <- c("5 Election Period 2020", "6 Election Day 2020", 
+                         "7 Post Election 2020", "sentiment")
+
+totalcount3 <- merge.df3 %>%
+  pivot_longer(!sentiment, names_to = "time block", values_to = "proportion")
+
+totalcount4 <- merge.df4 %>%
+  pivot_longer(!sentiment, names_to = "time block", values_to = "proportion")
+
+ggplot(totalcount3, aes(x = `time block`, y = proportion, group = sentiment)) +
+  geom_line(aes(linetype = sentiment, color = sentiment)) + 
+  geom_point(aes(color = sentiment)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ggplot(totalcount4, aes(x = `time block`, y = proportion, group = sentiment)) +
+  geom_line(aes(linetype = sentiment, color = sentiment)) + 
+  geom_point(aes(color = sentiment)) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+# Time Series (Taig Lonergan)
+## all functions needed to run are in the libraries included
+
+library(readr)
+library(dplyr)
+
+## read in data (from Kyle's cleaned data)
+trump_tweets <- read_csv("clean_tweets.csv")
+clean_tweets <- trump_tweets[,c(5,7)]
+
+## organize by date
+ordered_tweets <- clean_tweets %>% arrange(date)
+
+## sentiment analysis on whole dataset (will take a few minutes)
+text <- ordered_tweets$cleaned_text
+nrc_T <- get_nrc_sentiment(text)
+
+## create trust data frame
+trust_column <- nrc_T[,"trust",drop=F]
+date_column <- ordered_tweets[,"date", drop=F]
+trust_ts_df <- cbind(date_column,trust_column)
+
+## create date and time vectors for time series
+trust <- nrc_T[,"trust"]
+date <- ordered_tweets[,"date", drop=T]
+
+library(tseries)
+library(forecast)
+
+## create trust time series object (irregularly spaced)
+trust_ts <- irts(date,trust)
+
+## plot (hard to interpret, I know) - note that the all points are at discrete values
+plot(trust_ts, xlab="Date", ylab="Trust Score")
+points(trust_ts, col="red", cex=0.3)
+
+## Convert the date column to actual Date type
+trust_ts_df$date <- as.Date(trust_ts_df$date)
+head(trust_ts_df)
+
+## Calculate the monthly average trust score
+trust_monthly_avg_df <- trust_ts_df %>%
+  mutate(month = lubridate::month(date),
+         year = lubridate::year(date)) %>%
+  mutate(year_month = lubridate::make_date(year, month)) %>%
+  group_by(year_month) %>%
+  summarize(trust_monthly_avg = mean(trust, na.rm=T))
+head(trust_monthly_avg_df)
+
+## Create a monthly trust time series object (regularly spaced)
+trust_monthly_ts <- ts(trust_monthly_avg_df$trust_monthly_avg, start = c(2009,05), frequency = 12)
+
+## Plot
+tsdisplay(trust_monthly_ts, xlab="Date", ylab="Average Trust Score")
+
+## Finding the best fitting AR(p) model
+ar(trust_monthly_ts)
