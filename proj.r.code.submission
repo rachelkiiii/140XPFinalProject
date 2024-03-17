@@ -1,5 +1,28 @@
 # Data Cleaning (Kyle Lee)
+install.packages("readxl")
+install.packages("stringr")
+install.packages("writexl")
+library(readxl)
+library(stringr)
+library(writexl)
 
+tweets_df <- read_excel("/Users/young/Downloads/tweets_01-08-2021.xlsx")
+
+clean_text <- function(text) {
+  text <- tolower(text) # Convert to lowercase
+  text <- str_replace_all(text, "https?://\\S+|www\\.\\S+", "") # Remove URLs
+  text <- str_replace_all(text, "@\\w+", "") # Remove mentions (@)
+  text <- str_replace_all(text, "\\brt\\b", "") # Remove RT (Retweet)
+  text <- str_replace_all(text, "[^\\w\\s]", "") # Remove special characters, punctuation
+  text <- str_replace_all(text, "\\s{2,}", " ") # Replace multiple whitespaces with single space
+  text <- trimws(text) # Trim leading/trailing whitespaces
+  return(text)
+}
+
+tweets_df$cleaned_text <- sapply(tweets_df$text, clean_text)
+tweets_df <- tweets_df[tweets_df$cleaned_text != "", ]
+tweets_df <- tweets_df[, !(names(tweets_df) %in% c('id', 'isDeleted', 'device'))]
+write_xlsx(tweets_df, "/Users/young/Downloads/cleaned_trump_tweets.xlsx")
 
 
 # Timeline (Mana Nakano)
